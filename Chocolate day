@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Chocolate Day 🍫</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Comic Neue', cursive;
+}
+
+body{
+  height:100vh;
+  background: linear-gradient(135deg,#7b3f00,#d9a066,#ffd6e0);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+/* Card */
+.card{
+  background: rgba(255,255,255,0.95);
+  padding:36px 26px;
+  border-radius:36px;
+  width:95%;
+  max-width:420px;
+  text-align:center;
+  box-shadow:0 30px 55px rgba(0,0,0,0.35);
+  animation: pop 1s ease;
+  border:3px dashed #a47148;
+}
+
+@keyframes pop{
+  from{transform:scale(0.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+h1{
+  font-size:32px;
+  color:#6b2f0f;
+  margin-bottom:10px;
+}
+
+.name{
+  font-size:30px;
+  font-weight:700;
+  color:#4e2608;
+  margin-bottom:14px;
+}
+
+p{
+  font-size:19px;
+  margin:14px 0;
+  color:#3b2b2b;
+  line-height:1.5;
+}
+
+/* Cute gif */
+.gif{
+  width:180px;
+  margin:18px auto;
+  border-radius:20px;
+  box-shadow:0 10px 20px rgba(0,0,0,0.25);
+}
+
+/* Chocolate rain */
+.choco{
+  position:absolute;
+  top:-40px;
+  font-size:26px;
+  animation: fall linear infinite;
+}
+
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg)}
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Background Music -->
+<audio autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2023/03/27/audio_4d5bdbb8f7.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+  <h1>Happy Chocolate Day 🍫</h1>
+  <div class="name">Cookie Trinh 🍪</div>
+
+  <!-- Cute Chocolate GIF -->
+  <img class="gif" 
+       src="https://media.tenor.com/7WJZQkQk1cAAAAAi/bear-chocolate.gif" 
+       alt="cute chocolate gif">
+
+  <p>
+    Just like chocolate,  
+    you make my life sweeter  
+    in ways words can’t explain 🤎
+  </p>
+
+  <p>
+    On good days and bad days,  
+    you are my comfort,  
+    my favorite craving 🍫
+  </p>
+
+  <p>
+    If love had a taste,  
+    it would be warm, soft,  
+    and sweet like you 🥹
+  </p>
+
+  <p style="margin-top:18px;font-size:15px;">
+    Happy Chocolate Day, my Cookie 🍪  
+    <br>From your pookie 😘
+  </p>
+</div>
+
+<script>
+// Chocolate rain animation
+for(let i=0;i<28;i++){
+  let choco=document.createElement("div");
+  choco.innerHTML="🍫";
+  choco.className="choco";
+  choco.style.left=Math.random()*100+"vw";
+  choco.style.animationDuration=3+Math.random()*5+"s";
+  document.body.appendChild(choco);
+}
+</script>
+
+</body>
+</html>
