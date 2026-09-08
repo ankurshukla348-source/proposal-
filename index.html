@@ -2,139 +2,943 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Chocolate Day 🍫</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FAF5EC">
+<title>For Trinh — I'm sorry, and I love you</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+  :root{
+    --paper:#FAF5EC;
+    --paper-2:#F2E7D6;
+    --ink:#2E241C;
+    --ink-2:#6F5D4D;
+    --red:#B23A48;
+    --red-d:#8E2F3C;
+    --blush:#F0DACD;
+    --line:#E3D5C0;
+    --serif:'Cormorant Garamond',Georgia,serif;
+    --body:'Lora',Georgia,serif;
+    --hand:'Caveat',cursive;
+    --shadow:0 18px 40px -18px rgba(46,36,28,.28);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body.locked{overflow:hidden}
+  ::selection{background:var(--blush);color:var(--red-d)}
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Comic Neue', cursive;
-}
+  /* paper grain over everything, purely decorative */
+  body::after{
+    content:"";position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:.055;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
-body{
-  height:100vh;
-  background: linear-gradient(135deg,#7b3f00,#d9a066,#ffd6e0);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
+  /* ---------- envelope intro ---------- */
+  #intro{
+    position:fixed;inset:0;z-index:1500;background:var(--paper);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:26px;text-align:center;padding:24px;
+    transition:opacity .9s ease,visibility 0s .9s;
+  }
+  #intro.done{opacity:0;visibility:hidden}
+  .intro-kicker{font-family:var(--hand);font-size:1.6rem;color:var(--red);transform:rotate(-2deg)}
+  .envelope{
+    position:relative;width:min(310px,80vw);aspect-ratio:10/7;
+    perspective:1200px;cursor:pointer;filter:drop-shadow(0 24px 30px rgba(46,36,28,.22));
+    -webkit-tap-highlight-color:transparent;
+  }
+  .env-back{position:absolute;inset:0;background:#E8D6BE;border-radius:10px;z-index:1}
+  .env-letter{
+    position:absolute;left:5%;right:5%;top:6%;bottom:6%;z-index:2;
+    transform:translateY(6%);transition:transform 1s cubic-bezier(.6,0,.2,1) .9s;
+  }
+  .open .env-letter{transform:translateY(-58%) rotate(.5deg)}
+  .env-letter .paper{
+    position:absolute;inset:0;background:#FFFDF6;border-radius:4px;
+    box-shadow:0 4px 14px rgba(46,36,28,.14);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+    padding:10px;text-align:center;
+  }
+  .env-letter .paper b{font-family:var(--serif);font-style:italic;font-weight:600;font-size:1.25rem}
+  .env-letter .paper span{font-family:var(--hand);color:var(--ink-2);font-size:1.05rem}
+  .env-front{
+    position:absolute;inset:0;z-index:3;background:#F1E2CB;border-radius:10px;
+    clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%);
+    box-shadow:inset 0 -2px 0 rgba(46,36,28,.06);
+  }
+  .env-flap{
+    position:absolute;left:0;right:0;top:0;height:58%;z-index:4;
+    background:#E4D0B4;clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center;border-radius:10px 10px 0 0;
+    transition:transform .9s cubic-bezier(.7,0,.3,1) .18s,z-index 0s 1s;
+    backface-visibility:hidden;
+  }
+  .open .env-flap{transform:rotateX(-180deg);z-index:1}
+  .env-seal{
+    position:absolute;left:50%;top:56%;width:58px;height:58px;z-index:5;
+    transform:translate(-50%,-50%);border-radius:50%;background:#A93226;color:#F7EBDD;
+    font-family:var(--serif);font-weight:700;font-size:1.5rem;line-height:58px;text-align:center;
+    box-shadow:inset 0 -5px 9px rgba(0,0,0,.28),inset 0 4px 7px rgba(255,255,255,.18),0 6px 12px rgba(142,47,60,.4);
+    transition:transform .45s ease,opacity .45s ease .1s;
+    border:3px solid rgba(0,0,0,.06);border-radius:50%;
+  }
+  .env-seal::before{content:"";position:absolute;inset:5px;border:1.5px solid rgba(247,235,221,.55);border-radius:50%}
+  .open .env-seal{transform:translate(-50%,-50%) scale(1.5) rotate(24deg);opacity:0;pointer-events:none}
+  .intro-hint{font-family:var(--hand);font-size:1.15rem;color:var(--ink-2);animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+  .intro-skip{
+    position:absolute;bottom:max(18px,env(safe-area-inset-bottom));right:22px;
+    background:none;border:none;font-family:var(--hand);font-size:1.05rem;color:var(--ink-2);
+    text-decoration:underline;text-underline-offset:3px;cursor:pointer;
+  }
+  .intro-skip:focus-visible{outline:2px dashed var(--red);outline-offset:4px}
 
-/* Card */
-.card{
-  background: rgba(255,255,255,0.95);
-  padding:36px 26px;
-  border-radius:36px;
-  width:95%;
-  max-width:420px;
-  text-align:center;
-  box-shadow:0 30px 55px rgba(0,0,0,0.35);
-  animation: pop 1s ease;
-  border:3px dashed #a47148;
-}
+  /* ---------- progress thread (red string of fate) ---------- */
+  #thread{position:fixed;left:10px;top:0;bottom:0;width:2px;background:var(--line);z-index:900;pointer-events:none}
+  #threadFill{position:absolute;top:0;left:0;width:100%;height:0%;background:var(--red)}
+  #threadHeart{
+    position:absolute;left:50%;top:0;transform:translate(-50%,-50%) rotate(-12deg);
+    width:16px;height:16px;color:var(--red);
+  }
+  @media (max-width:420px){#thread{left:6px}}
 
-@keyframes pop{
-  from{transform:scale(0.6);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:800;display:flex;align-items:center;gap:14px;
+    padding:12px 20px;background:rgba(250,245,236,.88);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{font-family:var(--hand);font-size:1.35rem;color:var(--red);text-decoration:none;white-space:nowrap}
+  .nav-links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links a{
+    font-size:.82rem;letter-spacing:.04em;color:var(--ink-2);text-decoration:none;
+    padding:6px 11px;border-radius:999px;white-space:nowrap;transition:color .2s,background .2s;
+  }
+  .nav-links a:hover{color:var(--red);background:var(--blush)}
 
-h1{
-  font-size:32px;
-  color:#6b2f0f;
-  margin-bottom:10px;
-}
+  /* ---------- layout ---------- */
+  .wrap{width:min(680px,100% - 48px);margin-inline:auto;position:relative;z-index:1}
+  section{scroll-margin-top:86px}
+  .chapter{padding-block:clamp(68px,11vw,116px)}
+  .chapter + .chapter{border-top:1px solid var(--line)}
+  .ch-head{position:relative;margin-bottom:clamp(30px,6vw,52px)}
+  .ch-no{font-family:var(--hand);color:var(--red);font-size:1.3rem;display:block;margin-bottom:2px}
+  .ch-head h2{font-size:clamp(1.9rem,6vw,2.7rem);font-weight:600;line-height:1.15;letter-spacing:-.01em}
+  .margin-note{
+    display:block;margin-top:10px;font-family:var(--hand);font-size:1.15rem;color:var(--ink-2);
+    transform:rotate(-2deg);transform-origin:left;
+  }
+  @media (min-width:720px){
+    .margin-note{position:absolute;right:0;bottom:6px;margin:0}
+  }
 
-.name{
-  font-size:30px;
-  font-weight:700;
-  color:#4e2608;
-  margin-bottom:14px;
-}
+  /* reveal on scroll */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+  .reveal.in{opacity:1;transform:none}
 
-p{
-  font-size:19px;
-  margin:14px 0;
-  color:#3b2b2b;
-  line-height:1.5;
-}
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:88svh;display:flex;flex-direction:column;justify-content:center;
+    padding-block:60px 70px;position:relative;z-index:1;
+  }
+  .hero-doodle{width:34px;height:34px;color:var(--red);transform:rotate(-10deg);margin-bottom:20px}
+  .kicker{font-family:var(--hand);font-size:1.45rem;color:var(--red);margin-bottom:14px;transform:rotate(-1deg)}
+  h1{
+    font-family:var(--serif);font-weight:600;font-size:clamp(2.7rem,10vw,4.7rem);
+    line-height:1.04;letter-spacing:-.015em;margin-bottom:26px;
+  }
+  h1 em{font-style:italic;color:var(--red-d);text-decoration:underline wavy var(--red);text-decoration-thickness:2px;text-underline-offset:9px}
+  .lede{max-width:34rem;color:var(--ink-2);font-size:1.05rem;margin-bottom:34px}
+  .btn{
+    display:inline-block;background:var(--red);color:#FBF3EA;text-decoration:none;
+    font-family:var(--body);font-size:.95rem;letter-spacing:.03em;
+    padding:14px 28px;border-radius:999px;border:none;cursor:pointer;
+    box-shadow:0 14px 26px -12px rgba(142,47,60,.55);
+    transition:transform .18s ease,background .2s ease;
+  }
+  .btn:hover{background:var(--red-d)}
+  .btn:active{transform:scale(.96)}
+  .btn:focus-visible{outline:2px dashed var(--ink);outline-offset:4px}
+  .hero-sub{margin-top:18px;font-family:var(--hand);font-size:1.1rem;color:var(--ink-2)}
 
-/* Cute gif */
-.gif{
-  width:180px;
-  margin:18px auto;
-  border-radius:20px;
-  box-shadow:0 10px 20px rgba(0,0,0,0.25);
-}
+  /* ---------- apology ---------- */
+  .sorry-block{padding-left:20px;border-left:3px solid var(--red);margin-bottom:34px}
+  .sorry-block h3{font-family:var(--serif);font-size:1.4rem;font-weight:600;margin-bottom:8px}
+  .sorry-block p{color:var(--ink-2)}
+  .pull{
+    font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:clamp(1.5rem,5.4vw,2.1rem);line-height:1.3;color:var(--red-d);
+    margin:44px 0 26px;text-align:center;
+  }
+  .pull strong{color:var(--red);font-weight:600}
+  .sorry-close{color:var(--ink-2);max-width:36rem}
 
-/* Chocolate rain */
-.choco{
-  position:absolute;
-  top:-40px;
-  font-size:26px;
-  animation: fall linear infinite;
-}
+  /* ---------- numbers band ---------- */
+  .band{background:var(--paper-2);border-block:1px solid var(--line);padding-block:clamp(58px,9vw,90px);position:relative;z-index:1}
+  .band .big{
+    font-family:var(--serif);font-weight:600;font-size:clamp(4.6rem,20vw,8rem);
+    line-height:1;color:var(--red);letter-spacing:-.02em;
+  }
+  .band .big-label{font-family:var(--hand);font-size:1.5rem;color:var(--ink-2);margin-top:2px}
+  .stats{display:grid;grid-template-columns:1fr;gap:0;margin-top:34px;border-top:1px solid var(--line)}
+  @media (min-width:600px){.stats{grid-template-columns:repeat(3,1fr)}}
+  .stat{padding:18px 0;border-bottom:1px solid var(--line)}
+  @media (min-width:600px){.stat{border-bottom:none;padding:18px 22px 0 0}.stat+.stat{border-left:1px solid var(--line);padding-left:22px}}
+  .stat b{font-family:var(--serif);font-size:1.9rem;font-weight:600;display:block;line-height:1.1}
+  .stat span{font-size:.9rem;color:var(--ink-2)}
+  .band-note{margin-top:30px;font-family:var(--hand);font-size:1.25rem;color:var(--red);transform:rotate(-1deg)}
 
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg)}
-}
+  /* ---------- timeline ---------- */
+  .timeline{position:relative;padding-left:34px}
+  .timeline::before{
+    content:"";position:absolute;left:9px;top:8px;bottom:8px;width:2px;
+    background:repeating-linear-gradient(to bottom,var(--red) 0 7px,transparent 7px 13px);opacity:.55;
+  }
+  .tl-item{position:relative;padding-bottom:38px}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-dot{
+    position:absolute;left:-34px;top:4px;width:20px;height:20px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--red);display:grid;place-items:center;color:var(--red);
+  }
+  .tl-dot svg{width:11px;height:11px;opacity:0}
+  .tl-item.today .tl-dot{background:var(--red)}
+  .tl-item.today .tl-dot svg{opacity:1}
+  .tl-day{font-family:var(--hand);font-size:1.15rem;color:var(--red);display:block}
+  .tl-item h3{font-family:var(--serif);font-size:1.35rem;font-weight:600;margin:2px 0 6px}
+  .tl-item p{color:var(--ink-2);font-size:.98rem;max-width:32rem}
+
+  /* ---------- reason deck ---------- */
+  .deck{max-width:440px;margin-inline:auto;text-align:center}
+  .reason-card{
+    background:#FFFDF6;border:1px solid var(--line);border-radius:6px;
+    padding:38px 28px 30px;box-shadow:var(--shadow);position:relative;
+    transition:opacity .28s ease,transform .28s ease;min-height:190px;
+    display:flex;flex-direction:column;justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .reason-card::before{
+    content:"";position:absolute;top:-11px;left:50%;transform:translateX(-50%) rotate(-2deg);
+    width:88px;height:24px;background:rgba(217,165,160,.55);
+  }
+  .reason-card.out{opacity:0;transform:translateY(-16px) rotate(-1.4deg)}
+  .reason-text{font-family:var(--hand);font-size:1.75rem;line-height:1.35;color:var(--ink)}
+  .reason-count{margin-top:16px;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+  .deck-actions{margin-top:26px}
+  .deck-hint{margin-top:12px;font-family:var(--hand);font-size:1.1rem;color:var(--ink-2)}
+
+  /* ---------- inside jokes flip cards ---------- */
+  .jokes{display:grid;grid-template-columns:1fr;gap:18px}
+  @media (min-width:620px){.jokes{grid-template-columns:1fr 1fr}}
+  .joke{perspective:1200px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .joke-inner{
+    position:relative;min-height:215px;transform-style:preserve-3d;
+    transition:transform .7s cubic-bezier(.4,0,.2,1);
+  }
+  .joke.flipped .joke-inner{transform:rotateY(180deg)}
+  .joke-face{
+    position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    border-radius:8px;padding:24px;display:flex;flex-direction:column;justify-content:center;gap:10px;
+    border:1px solid var(--line);
+  }
+  .joke-front{background:#FFFDF6;box-shadow:var(--shadow)}
+  .joke-front .j-title{font-family:var(--hand);font-size:1.9rem;line-height:1.2;color:var(--ink)}
+  .joke-front .j-hint{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-top:auto}
+  .joke-back{background:var(--blush);transform:rotateY(180deg);color:var(--ink)}
+  .joke-back p{font-size:.93rem;line-height:1.6}
+
+  /* ---------- photo wall ---------- */
+  .ph-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px 16px}
+  @media (min-width:620px){.ph-grid{grid-template-columns:repeat(3,1fr)}}
+  .polaroid{
+    background:#FFFDF6;padding:10px 10px 12px;border-radius:3px;
+    box-shadow:0 10px 22px -10px rgba(46,36,28,.3);position:relative;
+    transition:transform .25s ease;
+  }
+  .polaroid::before{
+    content:"";position:absolute;top:-10px;left:50%;width:74px;height:22px;
+    transform:translateX(-50%) rotate(-3deg);background:rgba(217,165,160,.5);
+  }
+  .ph-img{
+    aspect-ratio:4/5;width:100%;object-fit:cover;display:block;background:var(--paper-2);
+    filter:sepia(.12) saturate(.95);border:1px solid var(--line);
+  }
+  .ph-cap{
+    display:block;margin-top:10px;font-family:var(--hand);font-size:1.15rem;line-height:1.25;
+    color:var(--ink);outline:none;min-height:1.4em;word-break:break-word;
+  }
+  .ph-cap:empty::before,.ph-cap[data-empty="true"]::before{content:"write a memory…";color:#B4A globalThis}
+  .ph-cap:empty::before{content:"write a memory…";color:#B7A793}
+  .ph-cap:focus{background:var(--blush)}
+  .ph-del{
+    position:absolute;top:-9px;right:-9px;width:26px;height:26px;border-radius:50%;
+    background:rgba(46,36,28,.6);color:#FBF3EA;border:none;cursor:pointer;
+    font-size:15px;line-height:26px;text-align:center;padding:0;
+    box-shadow:0 4px 8px rgba(46,36,28,.3);
+  }
+  .ph-del:active{transform:scale(.9)}
+  .add-tile{
+    aspect-ratio:3/4;border:2px dashed #CBAF92;border-radius:4px;background:rgba(242,231,214,.5);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    cursor:pointer;color:var(--ink-2);text-align:center;padding:16px;
+    transition:background .2s,border-color .2s;-webkit-tap-highlight-color:transparent;
+  }
+  .add-tile:hover{background:var(--paper-2);border-color:var(--red)}
+  .add-tile svg{width:30px;height:30px;color:var(--red)}
+  .add-tile b{font-family:var(--hand);font-weight:600;font-size:1.3rem;color:var(--ink)}
+  .add-tile span{font-size:.8rem;line-height:1.4}
+  .ph-foot{margin-top:22px;font-family:var(--hand);font-size:1.15rem;color:var(--ink-2);transform:rotate(-1deg)}
+
+  /* ---------- promises ---------- */
+  .promise{
+    display:flex;gap:16px;align-items:flex-start;padding:18px 4px;
+    border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;
+  }
+  .promise:first-of-type{border-top:1px solid var(--line)}
+  .promise input{position:absolute;opacity:0;pointer-events:none}
+  .p-box{
+    flex:none;width:28px;height:28px;margin-top:3px;border:2px solid var(--red);border-radius:6px;
+    display:grid;place-items:center;color:transparent;background:#FFFDF6;
+    transition:background .2s,color .2s,transform .15s;
+  }
+  .p-box svg{width:16px;height:16px}
+  .promise input:checked ~ .p-box{background:var(--red);color:#FBF3EA;transform:rotate(-6deg)}
+  .promise input:focus-visible ~ .p-box{outline:2px dashed var(--red);outline-offset:3px}
+  .promise p{font-size:1rem;color:var(--ink)}
+  .promise input:checked ~ .p-text{color:var(--red-d)}
+  .p-note{margin-top:18px;font-family:var(--hand);font-size:1.2rem;color:var(--ink-2)}
+  .p-note b{color:var(--red);font-weight:600}
+
+  /* ---------- closing ---------- */
+  .final{padding-block:clamp(80px,13vw,140px);text-align:center;position:relative;z-index:1}
+  .final h2{font-family:var(--serif);font-style:italic;font-weight:600;font-size:clamp(2.4rem,9vw,3.8rem);color:var(--red-d);margin-bottom:24px}
+  .final p{max-width:33rem;margin:0 auto 20px;color:var(--ink-2)}
+  .sign{font-family:var(--hand);font-size:1.9rem;color:var(--ink);margin:26px 0 40px}
+  .sign span{display:block;font-size:1.1rem;color:var(--ink-2)}
+  .heart-burst{position:fixed;inset:0;pointer-events:none;z-index:1800;overflow:hidden}
+  .h-heart{position:absolute;width:26px;height:26px;color:var(--red);opacity:0;animation:floatUp var(--dur,3s) ease-out forwards}
+  @keyframes floatUp{
+    0%{opacity:0;transform:translate(-50%,0) scale(.4) rotate(0deg)}
+    10%{opacity:1}
+    100%{opacity:0;transform:translate(calc(-50% + var(--dx,0px)),-170px) scale(var(--s,1.2)) rotate(var(--rr,10deg))}
+  }
+  footer{
+    text-align:center;padding:34px 20px calc(44px + env(safe-area-inset-bottom));
+    font-size:.82rem;color:var(--ink-2);border-top:1px solid var(--line);position:relative;z-index:1;
+  }
+  footer .hand{font-family:var(--hand);font-size:1.1rem;color:var(--red)}
+
+  /* toast */
+  #toast{
+    position:fixed;left:50%;bottom:calc(26px + env(safe-area-inset-bottom));transform:translate(-50%,16px);
+    background:var(--ink);color:#FBF3EA;font-size:.86rem;padding:11px 20px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:1900;
+    max-width:88vw;text-align:center;box-shadow:0 12px 26px rgba(46,36,28,.35);
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
 </style>
 </head>
+<body class="locked">
 
-<body>
+<noscript>
+  <style>#intro{display:none}body{overflow:auto!important}</style>
+</noscript>
 
-<!-- 🎵 Background Music -->
-<audio autoplay loop>
-  <source src="https://cdn.pixabay.com/audio/2023/03/27/audio_4d5bdbb8f7.mp3" type="audio/mpeg">
-</audio>
-
-<div class="card">
-  <h1>Happy Chocolate Day 🍫</h1>
-  <div class="name">Cookie Trinh 🍪</div>
-
-  <!-- Cute Chocolate GIF -->
-  <img class="gif" 
-       src="https://media.tenor.com/7WJZQkQk1cAAAAAi/bear-chocolate.gif" 
-       alt="cute chocolate gif">
-
-  <p>
-    Just like chocolate,  
-    you make my life sweeter  
-    in ways words can’t explain 🤎
-  </p>
-
-  <p>
-    On good days and bad days,  
-    you are my comfort,  
-    my favorite craving 🍫
-  </p>
-
-  <p>
-    If love had a taste,  
-    it would be warm, soft,  
-    and sweet like you 🥹
-  </p>
-
-  <p style="margin-top:18px;font-size:15px;">
-    Happy Chocolate Day, my Cookie 🍪  
-    <br>From your pookie 😘
-  </p>
+<!-- ============ ENVELOPE INTRO ============ -->
+<div id="intro" aria-label="A sealed letter for Trinh">
+  <p class="intro-kicker">Trinh, this one's for you</p>
+  <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Tap to open the letter">
+    <div class="env-back"></div>
+    <div class="env-letter">
+      <div class="paper">
+        <b>I'm sorry, Trinh.</b>
+        <span>from me — with all my heart</span>
+      </div>
+    </div>
+    <div class="env-front"></div>
+    <div class="env-flap"></div>
+    <div class="env-seal">T</div>
+  </div>
+  <p class="intro-hint">tap the seal to open</p>
+  <button class="intro-skip" id="skipIntro" type="button">skip</button>
 </div>
 
-<script>
-// Chocolate rain animation
-for(let i=0;i<28;i++){
-  let choco=document.createElement("div");
-  choco.innerHTML="🍫";
-  choco.className="choco";
-  choco.style.left=Math.random()*100+"vw";
-  choco.style.animationDuration=3+Math.random()*5+"s";
-  document.body.appendChild(choco);
-}
-</script>
+<!-- ============ RED THREAD / SCROLL PROGRESS ============ -->
+<div id="thread" aria-hidden="true">
+  <div id="threadFill"></div>
+  <svg id="threadHeart" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+</div>
 
+<!-- ============ NAV ============ -->
+<nav>
+  <a class="brand" href="#top">for Trinh</a>
+  <div class="nav-links">
+    <a href="#sorry">the apology</a>
+    <a href="#story">our story</a>
+    <a href="#reasons">reasons</a>
+    <a href="#jokes">our jokes</a>
+    <a href="#photos">photos</a>
+    <a href="#promises">promises</a>
+  </div>
+</nav>
+
+<main class="wrap" id="top">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <svg class="hero-doodle reveal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20.8S4 15.6 2.7 10.9C1.7 7.3 4 4.4 7 4.1c2 -.2 3.8 1 5 2.7 1.2-1.7 3-2.9 5-2.7 3 .3 5.3 3.2 4.3 6.8C20 15.6 12 20.8 12 20.8z"/></svg>
+    <p class="kicker reveal">day 543 — and counting</p>
+    <h1 class="reveal">I'm sorry,<br><em>Trinh.</em></h1>
+    <p class="lede reveal">I said things that hurt you. I made jokes out of your feelings when you deserved nothing but kindness from me. I can't undo that — so instead I built you this small corner of the internet. No excuses inside. Just the truth, our memories, and every reason I'm not letting go of us.</p>
+    <div class="reveal"><a class="btn" href="#sorry">start with the apology</a></div>
+    <p class="hero-sub reveal">543 days, one real apology, zero excuses</p>
+  </header>
+
+  <!-- ============ i. THE APOLOGY ============ -->
+  <section class="chapter" id="sorry">
+    <div class="ch-head reveal">
+      <span class="ch-no">no. i</span>
+      <h2>What I'm actually sorry for</h2>
+      <span class="margin-note">read this slowly, please</span>
+    </div>
+
+    <div class="sorry-block reveal">
+      <h3>I'm sorry for what I said.</h3>
+      <p>The words came out of my mouth and they landed on you, and they hurt. I don't get to decide they didn't matter. They did. You carried them, and I put them there.</p>
+    </div>
+    <div class="sorry-block reveal">
+      <h3>I'm sorry for making fun of you.</h3>
+      <p>Laughing <em>at</em> you instead of <em>with</em> you was small of me. You have never once been something to joke about — you are the person I brag about, not the punchline.</p>
+    </div>
+    <div class="sorry-block reveal">
+      <h3>I'm sorry for the apology I owed you sooner.</h3>
+      <p>You shouldn't have had to wait for a website to hear this clearly. You deserved it immediately, out loud, without conditions.</p>
+    </div>
+
+    <p class="pull reveal">"You were never the joke.<br><strong>You were always the point.</strong>"</p>
+
+    <p class="sorry-close reveal">What follows isn't me promising to be perfect. It's me promising direction — and showing you, in writing, exactly why you're worth every bit of the effort.</p>
+  </section>
+
+  <!-- ============ DAY COUNTER BAND ============ -->
+  <section class="band" aria-label="Our days together">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="big"><span id="dayNum">0</span></div>
+        <div class="big-label">days of us — since our first hello, March 2025</div>
+      </div>
+      <div class="stats reveal">
+        <div class="stat"><b>13,032</b><span>hours — most of them spent talking to you</span></div>
+        <div class="stat"><b>781,920</b><span>minutes — and I'd still ask for more</span></div>
+        <div class="stat"><b>1</b><span>heart — entirely, stubbornly yours</span></div>
+      </div>
+      <p class="band-note reveal">…and if you'll have me: day 544, 545, and every single one after that.</p>
+    </div>
+  </section>
+
+  <!-- ✏️ EDIT: swap these milestones for your real ones — dates, jokes, firsts. The more specific, the more it hits. -->
+  <section class="chapter" id="story">
+    <div class="ch-head reveal">
+      <span class="ch-no">no. ii</span>
+      <h2>Our story, so far</h2>
+      <span class="margin-note">I remember every knot in this thread</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-item reveal">
+        <span class="tl-dot"></span>
+        <span class="tl-day">day 1 — March 2025</span>
+        <h3>The first hello</h3>
+        <p>A message neither of us knew would change everything. I almost didn't send it. It is still one of the best decisions of my life.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-dot"></span>
+        <span class="tl-day">the early days</span>
+        <h3>First call, first "goodnight"</h3>
+        <p>The first time I heard your voice, the day got quieter in the best way. And the first goodnight — the one neither of us wanted to say — became a ritual we've kept for 543 days.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-dot"></span>
+        <span class="tl-day">day 100</span>
+        <h3>One hundred</h3>
+        <p>One hundred days of choosing each other across distance and time zones. I remember thinking: this one isn't like anything else. I was right.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-dot"></span>
+        <span class="tl-day">day 365</span>
+        <h3>A whole year of you</h3>
+        <p>A full trip around the sun with you in my life. You turned an ordinary year into the one I'll always measure the others against.</p>
+      </div>
+      <div class="tl-item reveal">
+        <span class="tl-dot"></span>
+        <span class="tl-day">day 500</span>
+        <h3>Five hundred</h3>
+        <p>Five hundred days in, and you were still — effortlessly — my favorite notification.</p>
+      </div>
+      <div class="tl-item today reveal">
+        <span class="tl-dot"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <span class="tl-day">day 543 — today</span>
+        <h3>This page</h3>
+        <p>Today I hurt you, and today I'm owning it. I'm still here. Still yours. Still sorry — and still so grateful, out of everyone in the world, that it's you.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✏️ EDIT: rewrite these 12 reasons in your own words — the closer to real details, the better. -->
+  <section class="chapter" id="reasons">
+    <div class="ch-head reveal">
+      <span class="ch-no">no. iii</span>
+      <h2>Reasons you're special</h2>
+      <span class="margin-note">there are more where these came from</span>
+    </div>
+    <div class="deck reveal">
+      <div class="reason-card" id="reasonCard">
+        <p class="reason-text" id="reasonText"></p>
+        <p class="reason-count" id="reasonCount"></p>
+      </div>
+      <div class="deck-actions">
+        <button class="btn" id="nextReason" type="button">another reason</button>
+      </div>
+      <p class="deck-hint">I started listing them once. I stopped at two hundred.</p>
+    </div>
+  </section>
+
+  <!-- ✏️ EDIT: replace with your real inside jokes — she'll smile at the real ones instantly. -->
+  <section class="chapter" id="jokes">
+    <div class="ch-head reveal">
+      <span class="ch-no">no. iv</span>
+      <h2>Things only we understand</h2>
+      <span class="margin-note">tap them — they flip</span>
+    </div>
+    <div class="jokes">
+      <div class="joke reveal" role="button" tabindex="0" aria-label="Reveal the joke">
+        <div class="joke-inner">
+          <div class="joke-face joke-front">
+            <p class="j-title">"five more minutes"</p>
+            <p class="j-hint">tap to reveal</p>
+          </div>
+          <div class="joke-face joke-back">
+            <p>Our famous goodbye that takes forty-five minutes. Neither of us ever wants to be the one who leaves first. Keep saying it — I'll keep staying.</p>
+          </div>
+        </div>
+      </div>
+      <div class="joke reveal" role="button" tabindex="0" aria-label="Reveal the joke">
+        <div class="joke-inner">
+          <div class="joke-face joke-front">
+            <p class="j-title">the goodnight standoff</p>
+            <p class="j-hint">tap to reveal</p>
+          </div>
+          <div class="joke-face joke-back">
+            <p>"You say it first." "No, you first." We invented a stalemate and defended it for 543 nights. I'd rather lose it every night than win it once.</p>
+          </div>
+        </div>
+      </div>
+      <div class="joke reveal" role="button" tabindex="0" aria-label="Reveal the joke">
+        <div class="joke-inner">
+          <div class="joke-face joke-front">
+            <p class="j-title">that emoji</p>
+            <p class="j-hint">tap to reveal</p>
+          </div>
+          <div class="joke-face joke-back">
+            <p>One emoji from you that means an entire paragraph. You know exactly the one. I smile like an idiot every single time it shows up.</p>
+          </div>
+        </div>
+      </div>
+      <div class="joke reveal" role="button" tabindex="0" aria-label="Reveal the joke">
+        <div class="joke-inner">
+          <div class="joke-face joke-front">
+            <p class="j-title">time-zone math</p>
+            <p class="j-hint">tap to reveal</p>
+          </div>
+          <div class="joke-face joke-back">
+            <p>We turned "wait, what time is it for you?" into a love language. Every late night you stayed up for me — I noticed. I noticed all of them.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PHOTO WALL ============ -->
+  <section class="chapter" id="photos">
+    <div class="ch-head reveal">
+      <span class="ch-no">no. v</span>
+      <h2>Our photo wall</h2>
+      <span class="margin-note">add ours — I'll frame every single one</span>
+    </div>
+    <div class="ph-grid reveal" id="photoGrid">
+      <div class="add-tile" id="addPhoto" role="button" tabindex="0" aria-label="Add a photo from your gallery">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        <b>add a photo</b>
+        <span>tap here — pick one straight from your gallery or camera</span>
+      </div>
+    </div>
+    <input type="file" id="photoInput" accept="image/*" multiple hidden>
+    <p class="ph-foot reveal">your photos save right here on this device, so they'll be waiting for you next time too.</p>
+  </section>
+
+  <!-- ✏️ EDIT: tune these promises so they sound exactly like you. -->
+  <section class="chapter" id="promises">
+    <div class="ch-head reveal">
+      <span class="ch-no">no. vi</span>
+      <h2>My promises to you</h2>
+      <span class="margin-note">check them off whenever I earn one back</span>
+    </div>
+
+    <div class="reveal">
+      <label class="promise">
+        <input type="checkbox" data-promise="0">
+        <span class="p-box"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <p class="p-text">To listen first — fully, all the way to the end — especially when it's hard to hear.</p>
+      </label>
+      <label class="promise">
+        <input type="checkbox" data-promise="1">
+        <span class="p-box"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <p class="p-text">To never make you the joke again. You are the reason for the smile — never the punchline.</p>
+      </label>
+      <label class="promise">
+        <input type="checkbox" data-promise="2">
+        <span class="p-box"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <p class="p-text">To say sorry fast, and mean it slower — with changed behavior, not just changed words.</p>
+      </label>
+      <label class="promise">
+        <input type="checkbox" data-promise="3">
+        <span class="p-box"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <p class="p-text">To protect the way you feel about yourself whenever you're with me.</p>
+      </label>
+      <label class="promise">
+        <input type="checkbox" data-promise="4">
+        <span class="p-box"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span>
+        <p class="p-text">To be someone whose words you can rest in — someone safe.</p>
+      </label>
+      <p class="p-note">checked: <b id="promiseCount">0 / 5</b> — and I'll earn back every single one.</p>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="final" id="yours">
+    <div class="ch-head reveal" style="margin-bottom:26px">
+      <span class="ch-no">finally</span>
+    </div>
+    <h2 class="reveal">Yours, always.</h2>
+    <p class="reveal">I can't take back what I said. I can only show you, day after day, that it never reflected how I actually see you — and that for 543 days, you have been the best thing in my life. You still are. On my hardest days and my best ones. Especially on the days I get it wrong.</p>
+    <p class="reveal">Thank you for hearing me out, even when I didn't deserve the audience.</p>
+    <p class="sign reveal">— yours<span>(you know exactly who)</span></p>
+    <div class="reveal">
+      <button class="btn" id="moreLove" type="button">one more thing…</button>
+    </div>
+    <p class="hero-sub reveal" style="margin-top:16px">ps — tap anywhere around here</p>
+  </section>
+
+</main>
+
+<footer>
+  <span class="hand">made by hand, with more love than skill</span><br>
+  for Trinh · day 543 of forever
+</footer>
+
+<div class="heart-burst" id="burstLayer" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s){ return document.querySelector(s); };
+  var HEART = '<svg viewBox="0 0 24 24" fill="currentColor" width="100%" height="100%"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- toast ---------- */
+  var toastEl = $("#toast"), toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2800);
+  }
+
+  /* ---------- envelope intro ---------- */
+  var intro = $("#intro"), envelope = $("#envelope");
+  function finishIntro(){
+    intro.classList.add("done");
+    document.body.classList.remove("locked");
+    try{ sessionStorage.setItem("trinh-opened","1"); }catch(e){}
+    setTimeout(function(){ if(intro.parentNode) intro.parentNode.removeChild(intro); }, 1100);
+  }
+  function openIntro(){
+    if(!intro || intro.classList.contains("open")) return;
+    intro.classList.add("open");
+    setTimeout(finishIntro, 2500);
+  }
+  if(intro){
+    if(sessionStorage.getItem("trinh-opened") || reduceMotion){
+      intro.parentNode.removeChild(intro);
+      document.body.classList.remove("locked");
+    }else{
+      envelope.addEventListener("click", openIntro);
+      envelope.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); openIntro(); }
+      });
+      $("#skipIntro").addEventListener("click", finishIntro);
+    }
+  }
+
+  /* ---------- scroll reveals ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target); }
+    });
+  }, { threshold: .12 });
+  document.querySelectorAll(".reveal").forEach(function(el){ io.observe(el); });
+
+  /* ---------- day count-up ---------- */
+  var dayNum = $("#dayNum"), dayDone = false;
+  var dayIO = new IntersectionObserver(function(entries){
+    if(entries[0].isIntersecting && !dayDone){
+      dayDone = true;
+      var target = 543, start = null, dur = 1700;
+      function step(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3);
+        dayNum.textContent = Math.round(target * eased);
+        if(p < 1) requestAnimationFrame(step);
+      }
+      if(reduceMotion){ dayNum.textContent = target; }
+      else requestAnimationFrame(step);
+      dayIO.disconnect();
+    }
+  }, { threshold: .4 });
+  if(dayNum) dayIO.observe(dayNum);
+
+  /* ---------- red thread progress ---------- */
+  var fill = $("#threadFill"), threadHeart = $("#threadHeart"), ticking = false;
+  function updateThread(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+    fill.style.height = pct + "%";
+    threadHeart.style.top = pct + "%";
+    ticking = false;
+  }
+  window.addEventListener("scroll", function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(updateThread); }
+  }, { passive: true });
+  updateThread();
+
+  /* ---------- reasons deck ---------- */
+  var reasons = [
+    "The way you laugh at your own jokes before you've even finished telling them.",
+    "You remember the small things everyone else forgets — including the small things about me.",
+    "Talking to you makes ordinary days feel like something worth writing down.",
+    "You're kind in a way that isn't for show. You're kind when it costs you something.",
+    "Your voice. Five seconds in and the whole day is better. Every single time.",
+    "You call me out when I'm wrong. (I'm working on needing that less often.)",
+    "The way you scrunch your nose when you're trying not to smile.",
+    "You make me want to be a gentler, better man — and you make me believe I can be.",
+    "You never once made me feel like too much or not enough.",
+    "Even when I hurt you, you heard me out. That kind of grace humbles me.",
+    "You are the first person I want to tell things to. Anything. Everything.",
+    "Because after 543 days, you're still my favorite part of every day."
+  ];
+  var rIdx = 0, rBusy = false;
+  var reasonText = $("#reasonText"), reasonCount = $("#reasonCount"), reasonCard = $("#reasonCard");
+  function renderReason(){
+    reasonText.textContent = reasons[rIdx];
+    reasonCount.textContent = "reason " + (rIdx + 1) + " of " + reasons.length;
+  }
+  renderReason();
+  $("#nextReason").addEventListener("click", function(){
+    if(rBusy) return;
+    rBusy = true;
+    reasonCard.classList.add("out");
+    setTimeout(function(){
+      rIdx = (rIdx + 1) % reasons.length;
+      renderReason();
+      reasonCard.classList.remove("out");
+      setTimeout(function(){ rBusy = false; }, 300);
+    }, 290);
+  });
+
+  /* ---------- inside joke flips ---------- */
+  document.querySelectorAll(".joke").forEach(function(card){
+    function flip(){ card.classList.toggle("flipped"); }
+    card.addEventListener("click", flip);
+    card.addEventListener("keydown", function(e){
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); flip(); }
+    });
+  });
+
+  /* ---------- photo wall ---------- */
+  var LS_PHOTOS = "trinh-photos", quotaWarned = false;
+  var grid = $("#photoGrid"), addTile = $("#addPhoto"), input = $("#photoInput");
+  var uid = 1;
+  var photos;
+  try{
+    photos = JSON.parse(localStorage.getItem(LS_PHOTOS) || "null");
+  }catch(e){ photos = null; }
+  if(!Array.isArray(photos)){
+    // ✏️ EDIT: replace these 3 starter polaroids with your own real photos (or delete the block — she can upload everything else).
+    photos = [
+      { src: "https://picsum.photos/seed/trinh-us-1/600/750.jpg", caption: "swap me for our first photo" },
+      { src: "https://picsum.photos/seed/trinh-us-2/600/750.jpg", caption: "the screenshot I still laugh at" },
+      { src: "https://picsum.photos/seed/trinh-us-3/600/750.jpg", caption: "put one of ours right here" }
+    ];
+  }
+  function savePhotos(){
+    try{
+      localStorage.setItem(LS_PHOTOS, JSON.stringify(photos));
+    }catch(e){
+      if(!quotaWarned){ quotaWarned = true; toast("Storage is full — these photos will show for this visit only"); }
+    }
+  }
+  function makePolaroid(photo){
+    var fig = document.createElement("figure");
+    fig.className = "polaroid";
+    fig.style.transform = "rotate(" + ((uid % 3) - 1) * 1.4 + "deg)";
+    var img = document.createElement("img");
+    img.className = "ph-img"; img.loading = "lazy"; img.alt = photo.caption || "our photo"; img.src = photo.src;
+    var cap = document.createElement("span");
+    cap.className = "ph-cap"; cap.contentEditable = "true"; cap.spellcheck = false;
+    cap.textContent = photo.caption || "";
+    cap.setAttribute("role", "textbox");
+    cap.setAttribute("aria-label", "Photo caption — tap to edit");
+    cap.addEventListener("blur", function(){
+      photo.caption = cap.textContent.trim();
+      cap.setAttribute("data-empty", photo.caption ? "false" : "true");
+      savePhotos();
+    });
+    cap.addEventListener("keydown", function(e){
+      if(e.key === "Enter"){ e.preventDefault(); cap.blur(); }
+    });
+    var del = document.createElement("button");
+    del.className = "ph-del"; del.type = "button"; del.textContent = "×";
+    del.setAttribute("aria-label", "Remove this photo");
+    del.addEventListener("click", function(e){
+      e.stopPropagation();
+      photos = photos.filter(function(p){ return p._uid !== photo._uid; });
+      savePhotos(); renderPhotos();
+      toast("Photo removed");
+    });
+    fig.appendChild(img); fig.appendChild(cap); fig.appendChild(del);
+    return fig;
+  }
+  function renderPhotos(){
+    grid.querySelectorAll(".polaroid").forEach(function(el){ el.remove(); });
+    photos.forEach(function(p){
+      if(!p._uid) p._uid = uid++;
+      grid.insertBefore(makePolaroid(p), addTile);
+    });
+  }
+  renderPhotos();
+
+  addTile.addEventListener("click", function(){ input.click(); });
+  addTile.addEventListener("keydown", function(e){
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); input.click(); }
+  });
+  input.addEventListener("change", function(){
+    var files = Array.prototype.slice.call(input.files || []);
+    input.value = "";
+    if(!files.length) return;
+    var pending = files.length;
+    files.forEach(function(file){
+      compressImage(file, function(dataURL){
+        if(dataURL){
+          photos.unshift({ src: dataURL, caption: "" });
+        }
+        if(--pending === 0){
+          savePhotos(); renderPhotos();
+          toast(files.length > 1 ? files.length + " photos added — tap a caption to write the memory" : "Added — tap the caption to write the memory");
+        }
+      });
+    });
+  });
+  function compressImage(file, done){
+    var img = new Image();
+    var url = URL.createObjectURL(file);
+    img.onload = function(){
+      try{
+        var max = 1000, w = img.naturalWidth, h = img.naturalHeight;
+        var r = Math.min(1, max / Math.max(w, h));
+        var c = document.createElement("canvas");
+        c.width = Math.max(1, Math.round(w * r));
+        c.height = Math.max(1, Math.round(h * r));
+        c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        done(c.toDataURL("image/jpeg", .82));
+      }catch(err){ URL.revokeObjectURL(url); done(null); }
+    };
+    img.onerror = function(){ URL.revokeObjectURL(url); done(null); };
+    img.src = url;
+  }
+
+  /* ---------- promises ---------- */
+  var LS_PROMISES = "trinh-promises";
+  var pInputs = document.querySelectorAll("input[data-promise]");
+  var pCount = $("#promiseCount");
+  var saved;
+  try{ saved = JSON.parse(localStorage.getItem(LS_PROMISES) || "null"); }catch(e){ saved = null; }
+  function updatePromiseCount(){
+    var n = 0;
+    pInputs.forEach(function(i){ if(i.checked) n++; });
+    pCount.textContent = n + " / " + pInputs.length;
+  }
+  pInputs.forEach(function(inp, i){
+    if(Array.isArray(saved) && saved[i]) inp.checked = true;
+    inp.addEventListener("change", function(){
+      var state = Array.prototype.map.call(pInputs, function(x){ return x.checked; });
+      try{ localStorage.setItem(LS_PROMISES, JSON.stringify(state)); }catch(e){}
+      updatePromiseCount();
+      if(inp.checked && n_all_checked()) toast("All five. I'm going to keep every one of them.");
+    });
+  });
+  function n_all_checked(){
+    return Array.prototype.every.call(pInputs, function(x){ return x.checked; });
+  }
+  updatePromiseCount();
+
+  /* ---------- heart bursts ---------- */
+  var layer = $("#burstLayer");
+  function spawnHearts(x, y, count){
+    if(reduceMotion) return;
+    for(var i = 0; i < count; i++){
+      var s = document.createElement("span");
+      s.className = "h-heart";
+      s.innerHTML = HEART;
+      s.style.left = x + "px";
+      s.style.top = y + "px";
+      s.style.width = s.style.height = (14 + Math.random() * 22) + "px";
+      s.style.color = Math.random() > .5 ? "#B23A48" : "#D9A5A0";
+      s.style.setProperty("--dx", (Math.random() * 160 - 80) + "px");
+      s.style.setProperty("--rr", (Math.random() * 50 - 25) + "deg");
+      s.style.setProperty("--s", (.8 + Math.random() * .8).toFixed(2));
+      s.style.setProperty("--dur", (2200 + Math.random() * 1800) + "ms");
+      s.addEventListener("animationend", function(){ this.remove(); });
+      layer.appendChild(s);
+    }
+  }
+  $("#moreLove").addEventListener("click", function(e){
+    e.stopPropagation();
+    var r = e.currentTarget.getBoundingClientRect();
+    spawnHearts(r.left + r.width / 2, r.top, 22);
+    toast("I love you, Trinh. All 543 days were worth it.");
+  });
+  $("#yours").addEventListener("click", function(e){
+    spawnHearts(e.clientX || innerWidth / 2, e.clientY || innerHeight / 2, 5);
+  });
+})();
+</script>
 </body>
 </html>
